@@ -14,6 +14,17 @@ startServer()
 async function startServer() {
   const app = express()
 
+  // Example API route (interface demo)
+  app.get('/api/hello', (req, res) => {
+    res.json({
+      message: 'Hello from /api/hello',
+      now: new Date().toISOString(),
+      path: req.path,
+      method: req.method,
+      random: Math.random()
+    })
+  })
+
   // Dev/prod middleware
   if (!isProduction) {
     const { devMiddleware } = await createDevMiddleware({ root })
@@ -34,9 +45,18 @@ async function startServer() {
 
     if (!httpResponse) return next()
 
-    const { body, statusCode, headers } = httpResponse
+    const { statusCode, headers } = httpResponse
     headers.forEach(([name, value]) => res.setHeader(name, value))
-    res.status(statusCode).send(body)
+
+    // When streaming is enabled, vike-react provides a Node.js stream (pipe()) instead of body.
+    if (typeof httpResponse.pipe === 'function') {
+      res.status(statusCode)
+      httpResponse.pipe(res)
+    } else {
+      // Non-streaming responses still expose `body`
+      const body = httpResponse.body
+      res.status(statusCode).send(body)
+    }
   })
 
   const port = process.env.PORT ? Number(process.env.PORT) : 3000

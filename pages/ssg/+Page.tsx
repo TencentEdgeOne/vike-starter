@@ -1,33 +1,28 @@
-import React from 'react'
 import { useData } from 'vike-react/useData'
 
-const SSR_CARDS = [
+const SSG_CARDS = [
   {
-    title: 'Server-Side Rendering',
-    description: 'Pages are rendered on the server for fast first paint and SEO. Full control over when and how HTML is produced.',
-    href: 'https://vike.dev/ssr'
+    title: 'Pre-rendering',
+    description: 'Pre-render pages at build time for fast, CDN-friendly delivery. No server required at runtime.',
+    href: 'https://vike.dev/pre-rendering'
   },
   {
-    title: 'Streaming',
-    description: 'Progressive HTML and data delivery for better TTFB and perceived performance.',
-    href: 'https://vike.dev/streaming'
+    title: 'Static hosts',
+    description: 'Deploy to GitHub Pages, Netlify, Cloudflare Pages, or any static host.',
+    href: 'https://vike.dev/github-pages'
   }
 ]
 
-/**
- * Hero background: radial gradient spotlights over full viewport.
- * Inspired by GymPage (AstroFit) https://github.com/Lautaro-R-collins/GymPage
- */
-export function Hero() {
-  const data = useData<{ serverRenderTime: string }>()
-  const serverRenderTimeIso = data?.serverRenderTime ?? ''
-  const serverRenderTime = serverRenderTimeIso
-    ? new Date(serverRenderTimeIso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'long' })
+export default function Page() {
+  const data = useData<{ buildTime: string }>()
+  const buildTimeIso = data?.buildTime ?? ''
+  const buildTime = buildTimeIso
+    ? new Date(buildTimeIso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'long' })
     : '—'
 
   return (
-    <header id="home" className="relative h-screen bg-gray-950 overflow-hidden">
-      {/* Dual radial gradient spotlights, animated to cover full screen */}
+    <header className="relative h-screen bg-gray-950 overflow-hidden">
+      {/* Same spotlight background as the SSR home hero */}
       <div className="absolute inset-0 grid grid-cols-2">
         <div
           className="animate-gradientMove min-h-[120vmax] min-w-[120vmax] -translate-x-1/4 -translate-y-1/4 opacity-60 blur-[90px]"
@@ -45,25 +40,24 @@ export function Hero() {
         />
       </div>
 
+      {/* Match the SSR hero layout: top padding for fixed navbar + vertical centering */}
       <main className="relative z-10 h-full px-6 pt-28 pb-10 flex items-center">
         <div className="w-full max-w-5xl mx-auto">
           <div className="text-center">
             <h1 className="text-4xl md:text-7xl font-bold text-[#0debd8] mb-3 text-shadow-cyan">
-              Vike Starter
+              SSG
             </h1>
             <p className="text-white/90 max-w-2xl mx-auto">
-              This page is server-side rendered — a Vike SSR example for EdgeOne Pages.
+              This page is statically generated — a Vike SSG example for EdgeOne Pages.
             </p>
             <p className="text-sm text-white/70 mt-2">
-              Rendered at:{' '}
-              <time dateTime={serverRenderTimeIso}>
-                {serverRenderTime}
-              </time>
+              Generated at:{' '}
+              <time dateTime={buildTimeIso}>{buildTime}</time>
             </p>
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {SSR_CARDS.map((card) => (
+            {SSG_CARDS.map((card) => (
               <a
                 key={card.title}
                 href={card.href}

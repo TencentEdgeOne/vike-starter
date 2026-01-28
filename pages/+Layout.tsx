@@ -1,10 +1,18 @@
 import React from 'react'
+import { usePageContext } from 'vike-react/usePageContext'
 import '../styles/global.css'
 
 // Replace with your repo URL when ready
 const GITHUB_URL = 'https://github.com/vikejs/vike'
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const pageContext = usePageContext()
+  const pathname = pageContext?.urlPathname ?? '/'
+  const isHome = pathname === '/'
+  const isSsg = pathname.startsWith('/ssg')
+  const isInterface = pathname.startsWith('/interface')
+  const isStream = pathname.startsWith('/stream')
+
   return (
     <div className="min-h-screen font-sans antialiased">
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4">
@@ -12,10 +20,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <img src="https://vike.dev/assets/static/vike-shadow.Dg10A0c3.svg" alt="Vike" className="h-8 w-8" />
         </a>
         <nav className="flex items-center gap-6 md:gap-10">
-          <a href="/#home" className="nav-pill">home</a>
-          <a href="https://vike.dev/pre-rendering" className="nav-pill" target="_blank" rel="noopener noreferrer">ssg</a>
-          <a href="https://vike.dev/api-routes" className="nav-pill" target="_blank" rel="noopener noreferrer">interface</a>
-          <a href="https://vike.dev/streaming" className="nav-pill" target="_blank" rel="noopener noreferrer">stream</a>
+          <a
+            href="/"
+            className={`nav-pill${isHome ? ' nav-pill--active' : ''}`}
+            aria-current={isHome ? 'page' : undefined}
+          >
+            home
+          </a>
+          <a
+            href="/ssg"
+            className={`nav-pill${isSsg ? ' nav-pill--active' : ''}`}
+            aria-current={isSsg ? 'page' : undefined}
+          >
+            ssg
+          </a>
+          <a
+            href="/interface"
+            className={`nav-pill${isInterface ? ' nav-pill--active' : ''}`}
+            aria-current={isInterface ? 'page' : undefined}
+          >
+            interface
+          </a>
+          <a
+            href="/stream"
+            className={`nav-pill${isStream ? ' nav-pill--active' : ''}`}
+            aria-current={isStream ? 'page' : undefined}
+          >
+            stream
+          </a>
         </nav>
         <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-[#0debd8] p-1" aria-label="GitHub">
           <svg className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
