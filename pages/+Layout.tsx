@@ -2,8 +2,7 @@ import React from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import '../styles/global.css'
 
-// Replace with your repo URL when ready
-const GITHUB_URL = 'https://github.com/vikejs/vike'
+const GITHUB_URL = 'https://github.com/TencentEdgeOne/vike-starter'
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const pageContext = usePageContext()
