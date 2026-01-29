@@ -5,6 +5,6 @@ import edgeone from '@edgeone/vite'
 
 export default defineConfig({
   plugins: [
-    react(), vike(), edgeone()]
-})
+    react(), vike(), edgeone({ serverWrapper: 'vike' })]
+});
 
