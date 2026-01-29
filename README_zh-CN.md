@@ -1,6 +1,6 @@
 # Vike Starter
 
-这是一个基于 [Vike](https://vike.dev) 和 [React](https://react.dev) 的示例项目，用来展示服务端渲染（SSR）、HTML 流式传输（Streaming）以及 API 路由能力。这个模板演示了 Vike 的文件路由、与 EdgeOne Pages 的适配等特性。
+这是一个基于 [Vike](https://vike.dev) 和 [React](https://react.dev) 的示例项目，用来展示服务端渲染（SSR）、HTML 流式传输（Streaming）以及动态路由能力。这个模板演示了 Vike 的文件路由、与 EdgeOne Pages 的适配等特性。
 
 ## 📚 示例特性一览
 
@@ -10,14 +10,14 @@
 
 - **`/`** - 首页，包含 Hero 区、导航胶囊按钮，以及服务端渲染的耗时信息
 - **`/ssg`** - 静态站点生成（SSG）示例，页面在构建时预渲染，并展示构建时间
-- **`/interface`** - 交互示例页面，包含带类型定义的 `/api/hello` API 路由和服务端数据获取
+- **`/posts/@category/@slug`** - 动态路由示例，支持两级 URL 参数（如 `/posts/tech/hello-vike`）
 - **`/stream`** - HTML 流式传输示例，使用 React Suspense 和模拟的慢路径区块
 
 ### 主要特性
 
 - ✨ **Vike + React SSR** - 基于文件路由的服务端渲染
 - 🔄 **HTML Streaming** - 使用 React Suspense 的流式响应演示
-- 🛣️ **API Routes** - 使用共享 TypeScript 类型的简单 JSON 接口
+- 🛣️ **动态路由** - 支持 `@category/@slug` 模式的嵌套 URL 参数
 - 🎨 **现代化 UI** - 使用 Tailwind CSS、渐变聚光灯背景和发光卡片
 
 ## 🧞 常用命令

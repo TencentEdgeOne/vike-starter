@@ -10,7 +10,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = pageContext?.urlPathname ?? '/'
   const isHome = pathname === '/'
   const isSsg = pathname.startsWith('/ssg')
-  const isInterface = pathname.startsWith('/interface')
+  const isPosts = pathname.startsWith('/posts')
   const isStream = pathname.startsWith('/stream')
 
   return (
@@ -35,18 +35,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ssg
           </a>
           <a
-            href="/interface"
-            className={`nav-pill${isInterface ? ' nav-pill--active' : ''}`}
-            aria-current={isInterface ? 'page' : undefined}
-          >
-            interface
-          </a>
-          <a
             href="/stream"
             className={`nav-pill${isStream ? ' nav-pill--active' : ''}`}
             aria-current={isStream ? 'page' : undefined}
           >
             stream
+          </a>
+          <a
+            href="/posts/tech/hello-vike"
+            className={`nav-pill${isPosts ? ' nav-pill--active' : ''}`}
+            aria-current={isPosts ? 'page' : undefined}
+          >
+            posts
           </a>
         </nav>
         <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-[#0debd8] p-1" aria-label="GitHub">

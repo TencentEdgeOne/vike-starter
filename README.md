@@ -1,6 +1,6 @@
 # Vike Starter
 
-This is a [Vike](https://vike.dev) + [React](https://react.dev) project demonstrating server-side rendering, HTML streaming, and API routes. This template showcases Vike file-based routing, an EdgeOne Pages adapter, and more.
+This is a [Vike](https://vike.dev) + [React](https://react.dev) project demonstrating server-side rendering, HTML streaming, and dynamic routing. This template showcases Vike file-based routing, an EdgeOne Pages adapter, and more.
 
 ## 📚 Features Demonstrated
 
@@ -10,14 +10,14 @@ This project includes several example pages that demonstrate different Vike capa
 
 - **`/`** - Homepage with hero layout, navigation pills, and server-rendered timing info
 - **`/ssg`** - Static site generation example with prerendered HTML and build-time data
-- **`/interface`** - Interactive page with a typed `/api/hello` API route and server-side data fetching
+- **`/posts/@category/@slug`** - Dynamic routing example with two-level URL parameters (e.g. `/posts/tech/hello-vike`)
 - **`/stream`** - Streaming HTML example using React Suspense and a simulated slow section
 
 ### Key Features
 
 - ✨ **Vike + React SSR** - File-based routing with server-side rendering
 - 🔄 **HTML streaming** - Streaming response demo using React Suspense
-- 🛣️ **API routes** - Simple JSON endpoint with shared TypeScript types
+- 🛣️ **Dynamic routing** - Nested URL parameters with `@category/@slug` pattern
 - 🎨 **Modern UI** - Tailwind CSS, animated spotlight hero, and glowing cards
 
 ## 🧞 Commands
