@@ -111,17 +111,9 @@ export default function Page() {
               progressively streamed to the browser.
             </p>
             <p className="text-sm text-white/70 mt-3">
-              Click the button below to re-run the streaming demo (reloads this page).
+              Open this page and watch how the progress bar is sent first, then replaced once the streamed section
+              finishes rendering.
             </p>
-            <div className="mt-4 flex justify-center">
-              <button
-                type="button"
-                onClick={() => window.location.reload()}
-                className="nav-pill w-40 text-[11px] leading-tight"
-              >
-                Replay streaming
-              </button>
-            </div>
           </div>
 
           {/* Single card area with progress + streamed content */}
