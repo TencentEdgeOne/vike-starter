@@ -1,78 +1,88 @@
+/**
+ * SSG 页面内容由 Vue (SsgPage.vue) 实现。
+ * 本文件是 Vike 默认 React 壳层：仅负责挂载 Vue 的 SSR HTML 并做客户端 hydration。
+ * 与 posts 页一致：passToClient、专用 HTML script、恢复逻辑、独立 CSS，避免内容空白。
+ */
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useData } from 'vike-react/useData'
+import { usePageContext } from 'vike-react/usePageContext'
+import { SSG_CARDS } from './ssgCards'
+import { mountSsgVue } from './mountSsgVue'
+import './ssg-page.css'
 
-const SSG_CARDS = [
-  {
-    title: 'Pre-rendering',
-    description: 'Pre-render pages at build time for fast, CDN-friendly delivery. No server required at runtime.',
-    href: 'https://vike.dev/pre-rendering'
-  },
-  {
-    title: 'Static hosts',
-    description: 'Deploy to GitHub Pages, Netlify, Cloudflare Pages, or any static host.',
-    href: 'https://vike.dev/github-pages'
+function getSsgVueHtmlFromScript(): string | undefined {
+  if (typeof document === 'undefined') return undefined
+  try {
+    const dedicated = document.getElementById('ssg-vue-html')
+    if (dedicated?.textContent) {
+      return JSON.parse(dedicated.textContent) as string
+    }
+    const el = document.getElementById('vike_pageContext')
+    if (el?.textContent) {
+      const parsed = JSON.parse(el.textContent) as { ssgVueHtml?: string }
+      return parsed.ssgVueHtml
+    }
+  } catch {
+    // ignore
   }
-]
+  return undefined
+}
 
 export default function Page() {
+  const pageContext = usePageContext()
   const data = useData<{ buildTime: string }>()
-  const buildTimeIso = data?.buildTime ?? ''
-  const buildTime = buildTimeIso
-    ? new Date(buildTimeIso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'long' })
-    : '—'
+  const fromContext = (pageContext as { ssgVueHtml?: string }).ssgVueHtml
+  const fromScript = useMemo(getSsgVueHtmlFromScript, [])
+  const ssgVueHtml = fromContext ?? fromScript
+  const ssgVueProps = (pageContext as { ssgVueProps?: { buildTimeIso: string; cards: typeof SSG_CARDS } }).ssgVueProps
+  const restoredRef = useRef(false)
 
+  useEffect(() => {
+    mountSsgVue(
+      ssgVueProps ?? (data ? { buildTimeIso: data.buildTime, cards: SSG_CARDS } : undefined)
+    )
+  }, [ssgVueProps, data])
+
+  // If hydration cleared the root (ssgVueHtml was undefined on first paint), restore from script (same as posts)
+  useEffect(() => {
+    const root = document.getElementById('ssg-vue-root')
+    if (!root || restoredRef.current) return
+    if (!root.hasChildNodes() || root.textContent?.trim() === '') {
+      const html = getSsgVueHtmlFromScript()
+      if (html) {
+        root.innerHTML = html
+        restoredRef.current = true
+      }
+    }
+  }, [])
+
+  const htmlForScript = fromContext ?? ssgVueHtml
   return (
-    <header className="relative h-screen bg-gray-950 overflow-hidden">
-      {/* Same spotlight background as the SSR home hero */}
-      <div className="absolute inset-0 grid grid-cols-2">
-        <div
-          className="animate-gradientMove min-h-[120vmax] min-w-[120vmax] -translate-x-1/4 -translate-y-1/4 opacity-60 blur-[90px]"
-          style={{
-            background: 'radial-gradient(ellipse 70% 70% at 50% 50%, #2cc2f0 0%, #1f6986 35%, transparent 65%)'
+    <div className="relative h-screen bg-gray-950 overflow-hidden">
+      {htmlForScript != null && (
+        <script
+          type="application/json"
+          id="ssg-vue-html"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(htmlForScript).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029')
           }}
-          aria-hidden
         />
-        <div
-          className="animate-gradientMove2 min-h-[120vmax] min-w-[120vmax] translate-x-1/4 -translate-y-1/4 opacity-60 blur-[90px]"
-          style={{
-            background: 'radial-gradient(ellipse 70% 70% at 50% 50%, #02ffee 0%, #277752 35%, transparent 65%)'
+      )}
+      {ssgVueProps != null && (
+        <script
+          type="application/json"
+          id="ssg-vue-props"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(ssgVueProps).replace(/</g, '\\u003c')
           }}
-          aria-hidden
         />
-      </div>
-
-      {/* Match the SSR hero layout: top padding for fixed navbar + vertical centering */}
-      <main className="relative z-10 h-full px-6 pt-28 pb-10 flex items-center">
-        <div className="w-full max-w-5xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-7xl font-bold text-[#0debd8] mb-3 text-shadow-cyan">
-              SSG
-            </h1>
-            <p className="text-white/90 max-w-2xl mx-auto">
-              This page is statically generated — a Vike SSG example for EdgeOne Pages.
-            </p>
-            <p className="text-sm text-white/70 mt-2">
-              Generated at:{' '}
-              <time dateTime={buildTimeIso}>{buildTime}</time>
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {SSG_CARDS.map((card) => (
-              <a
-                key={card.title}
-                href={card.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="card-glow block p-6 rounded-[2rem] border border-[#0debd8]/40 bg-gray-950/40 backdrop-blur hover:border-[#0debd8]"
-              >
-                <h3 className="text-lg font-semibold text-[#0debd8] mb-2">{card.title}</h3>
-                <p className="text-sm text-white/85">{card.description}</p>
-                <span className="inline-block mt-4 text-sm text-[#0debd8]">Read on vike.dev →</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </main>
-    </header>
+      )}
+      <div
+        id="ssg-vue-root"
+        className="h-full min-h-screen"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={ssgVueHtml ? { __html: ssgVueHtml } : undefined}
+      />
+    </div>
   )
 }

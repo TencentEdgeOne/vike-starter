@@ -1,6 +1,5 @@
 import type { Config } from 'vike/types'
 
 export default {
-  prerender: true,
-  passToClient: ['ssgVueHtml', 'ssgVueProps']
+  passToClient: ['postsSvelteProps', 'postsSvelteHtml']
 } satisfies Config

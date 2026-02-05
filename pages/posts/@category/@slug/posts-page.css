@@ -1,0 +1,95 @@
+/* Shared with PostPage.svelte so SSR content is visible when Svelte is not mounted */
+#posts-svelte-root .posts-header {
+  position: relative;
+  height: 100vh;
+  min-height: 100vh;
+  background-color: rgb(3 7 18);
+  overflow: hidden;
+}
+
+#posts-svelte-root .posts-background {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#posts-svelte-root .posts-main {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  padding-top: 7rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  color: white;
+  box-sizing: border-box;
+}
+
+/* Card and content so Tailwind-like classes work when not from Tailwind bundle */
+#posts-svelte-root .card-glow {
+  padding: 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(13, 235, 216, 0.4);
+  background: rgba(3, 7, 18, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+/* Tech/category tag: first span in the meta row (small, uppercase, pill) */
+#posts-svelte-root .card-glow > div:first-of-type > span:first-of-type {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(13, 235, 216, 0.2);
+  color: #0debd8;
+  border: 1px solid rgba(13, 235, 216, 0.3);
+}
+
+/* Date text next to tag */
+#posts-svelte-root .card-glow > div:first-of-type > span:last-of-type {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Meta row: flex gap */
+#posts-svelte-root .card-glow > div:first-of-type {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* Prev/next row (last flex row in card) */
+#posts-svelte-root .card-glow > div:last-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Prev/next links */
+#posts-svelte-root .card-glow > div:last-of-type a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+#posts-svelte-root .card-glow > div:last-of-type a:hover {
+  color: #0debd8;
+}
+
+/* Arrow icon: 1rem so it doesn't render huge */
+#posts-svelte-root .card-glow > div:last-of-type a svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
