@@ -1,6 +1,5 @@
-import type { Config } from 'vike/types'
+import type { Config } from "vike/types";
 
 export default {
-  stream: true
-} satisfies Config
-
+  stream: "web",
+} satisfies Config;
